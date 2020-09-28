@@ -24,6 +24,10 @@ print("test")
 from time import sleep
 #sleep(15)
 
+# from multiprocessing import Process
+import threading, sys, os
+import time
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
@@ -31,7 +35,13 @@ if __name__ == "__main__":
     mainWin.setFromConfigurationFile()
     # the aim of the program 
     mainWin.show()
-    myBusiness.the_aim_of_the_program_with_delay()
+
+    thread = threading.Thread(target=myBusiness.the_aim_of_the_program_with_delay, args=())
+    thread.daemon = True                            # Daemonize thread
+    thread.start()                                  # Start the execution
+    #my_func()
+
+    
     #do stuff
     mainWin.setFromConfigurationFile()
     sys.exit( app.exec_() )

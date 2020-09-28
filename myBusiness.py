@@ -12,11 +12,9 @@ import myGUI
 
 
 # from multiprocessing import Process
-import threading
-
+import threading, sys, os
 import time
-
-
+import signal
 
 if_true_exit = False
 
@@ -236,7 +234,12 @@ def my_func():
     """)
     the_aim_of_the_program()
     print("Process finished")
-
+    """
+    import sys
+    sys.exit(1)
+    exit()
+    quit()
+    """
     # get_after_delay()
     # time.sleep(time_after_run)
 
@@ -248,6 +251,24 @@ def myShutdown():
     """
     if_true_exit = True
     print("Process Shutdown")
+    #import sys
+    #sys.exit(1)
+    #exit()
+    #quit()
+
+    # Works
+    # import os
+    os._exit(1)
+    """
+    import psutil
+
+    current_system_pid = os.getpid()
+
+    ThisSystem = psutil.Process(current_system_pid)
+    ThisSystem.terminate()
+    """
+    # https://stackoverflow.com/questions/1489669/how-to-exit-the-entire-application-from-a-python-thread
+    # threading.interrupt_main()
     pass
 
 
@@ -265,17 +286,36 @@ def the_aim_of_the_program_with_delay():
                 print("auto_run is True")
                 # time.sleep(10)
 
-                #thread = threading.Thread(target=my_func, args=())
-                #thread.daemon = True                            # Daemonize thread
-                #thread.start()                                  # Start the execution
-                my_func()
+                ############################
+                print("Process starts")
+                print("delay starts")
+                get_delay()
+                time.sleep(time_to_start)
+
+                print("delay passed")
+                print("""
+                #########################################
+                Automated Process started
+                #########################################
+                """)
+                the_aim_of_the_program()
+                print("""
+                #########################################
+                Automated Process finished
+                #########################################
+                """)
+                get_after_delay()
+                print("after delay starts")
+                time.sleep(time_after_run)
+                print("after delay passed")
+                print("Process finished")
+                
+
+                ############################
 
                 print("bye guy")
+                myShutdown()
                 
-                import sys
-                sys.exit(1)
-                exit()
-                quit()
                 pass
             else:
                 print("auto_run is False")
