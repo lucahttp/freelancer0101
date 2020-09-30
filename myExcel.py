@@ -130,7 +130,7 @@ def CreateExample():
 
     #Insert the example data to the example excel
     #companies = ["datavision","excuse me, this is a test","<YES/NO>","REQ0000000","RITM0000000","SCTASK0000000","aaaa-aa-aa a:aa:aa","BI-ITMS-DATAVISION-ACCT-MGMT"]
-    companies = ["Randy","Ward","rward@lapro.tv","15042280136","0207A","04/09/2020","08/09/2020","0210207A24825215042280136Jamie Albert","Pam Martin - Keller Williams  ","Pam Martin, REALTOR","18025 Lake Iris Avenue","Baton Rouge","LA","70817","pammartin01@yahoo.com pammartin01@kw.com","(251)269-8864 or (251)279-0716","Are you ready for your vacation?  ","We hope you enjoy your stay. Please contact me If you need anything!"]
+    companies = ["NAME","LASTNAME","lucasain@mail.com","08001234","3312","01/01/2020","02/01/2020","everything seems to be going well","Peluca Sistemas","Luca Sain","someStreet 123","someCity","gg","70817","facebook@facebook.com google@google.com","(123)456-7890 or (098)765-4321","Are you ready for your vacation?  ","We hope you enjoy your stay. Please contact me If you need anything!"]
     page.append(companies)
 
     # Apply styles to the example sheet
@@ -379,13 +379,16 @@ def getDataFromExcel(excel_file_to_load,subject,body,body_in_html):
         qr_image_file = myQRCode.qrcode_create(column_data_code)
 
         # word_file_path = './~tempfile.docx'
-        word_file_path = './document.docx'
-        qr_image_file = myConfig.getPath(qr_image_file)
 
-        myWord.word_create_from_template(word_file_path,qr_image_file,str(column_data_first_name) +" "+ str(column_data_last_name),column_data_greeting,column_data_unit,column_data_arrival,column_data_departure,column_data_salutation,column_data_maddress,column_data_company_name,column_data_phone)
+        # cs_freeze needs that
+        #qr_image_file = myConfig.getPath(qr_image_file)
+
+
+
 
         body_from_template = myWord.create_email_from_html_template(qr_image_file,str(column_data_first_name) +" "+ str(column_data_last_name),column_data_greeting,column_data_unit,column_data_arrival,column_data_departure,column_data_salutation,column_data_maddress,column_data_company_name,column_data_phone)
 
+        #body_from_template = myConfig.getPath(body_from_template)
         print(type(column_data_email))
         if type(column_data_email) == str:
             import re
@@ -408,7 +411,10 @@ def getDataFromExcel(excel_file_to_load,subject,body,body_in_html):
                 # send the email with the image
                 if myConfig.check_data('Automate outlook mailing','Word_File_Attachement'):
                     if myConfig.get_saved_data('Automate outlook mailing','Word_File_Attachement') == "True":
-                        
+
+                        word_file_path = './document.docx'
+                        myWord.word_create_from_template(word_file_path,qr_image_file,str(column_data_first_name) +" "+ str(column_data_last_name),column_data_greeting,column_data_unit,column_data_arrival,column_data_departure,column_data_salutation,column_data_maddress,column_data_company_name,column_data_phone)
+
                         myMail.email_send(email,subject,body,body_from_template,qr_image_file,word_file_path)
                         print('Word File Attachement On')
                         pass

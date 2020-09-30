@@ -18,7 +18,7 @@ executables = [
 ]
 
 setup(name='Automate outlook mailing',
-      version = '1.0',
+      version = '3.3',
       description = 'Excel -> Word & QR -> Email',
       options = {'build_exe': build_options},
       executables = executables)

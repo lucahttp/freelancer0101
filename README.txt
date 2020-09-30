@@ -70,4 +70,4 @@ UPX
 to compile:
 run powershell as admin
 cd to/the/path/of/the/project
-C:/Python38/python.exe  setup.py install
+C:/Python38/python.exe   setup.py install

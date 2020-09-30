@@ -14,7 +14,7 @@ import myGUI
 # from multiprocessing import Process
 import threading, sys, os
 import time
-import signal
+# import signal
 
 if_true_exit = False
 

@@ -5,8 +5,13 @@
 import configparser
 
 import myWord
+import myConfig
+
+import os
+import sys
+
 configuration_file_path = 'example.ini'
-configuration_file_path = myWord.resource_path(configuration_file_path)
+#configuration_file_path = myConfig.getPath(configuration_file_path)
 config = configparser.ConfigParser()
 config.sections()
 config.read(configuration_file_path)
@@ -94,7 +99,19 @@ def print_data(section):
         pass
     #return (key in config[section])
 
+def getPathExternal(filename):
+    # https://stackoverflow.com/questions/404744/determining-application-path-in-a-python-exe-generated-by-pyinstaller
+    # config_name = 'myapp.cfg'
+    # filename
 
+    # determine if application is a script file or frozen exe
+    if getattr(sys, 'frozen', False):
+        application_path = os.path.dirname(sys.executable)
+    elif __file__:
+        application_path = os.path.dirname(__file__)
+
+    config_path = os.path.join(application_path, filename)
+    return config_path
 def getPath(filename):
     import os
     import sys

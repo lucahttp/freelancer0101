@@ -1,4 +1,25 @@
 
+import docx
+from docxtpl import DocxTemplate
+from docx.shared import Cm
+#from html import escape
+from docxtpl import DocxTemplate, InlineImage
+# from mailmerge import MailMerge
+from datetime import date
+
+from string import Template
+import base64
+
+import os
+import sys
+from os import chdir
+from os.path import join
+from os.path import dirname
+from os import environ
+
+
+
+import myConfig
 # document_template = "./template_2.docx"
 document_template = "template.docx"
 document_template_html = "template.html"
@@ -6,7 +27,6 @@ document_template_html = "template.html"
 
 
 def word_read(word_file):
-    import docx
     #doc = docx.Document("E:/my_word_file.docx")
     doc = docx.Document(word_file)
     all_paras = doc.paragraphs
@@ -15,7 +35,6 @@ def word_read(word_file):
         print(para.text)
         print("-------")
 
-    import docx
  
     # open connection to Word Document
     doc = docx.Document(word_file)
@@ -29,7 +48,7 @@ def word_read(word_file):
 def word_crate(word_file):
     # https://stackabuse.com/reading-and-writing-ms-word-files-in-python-via-python-docx-module/
     # pip install python-docx
-    import docx
+
 
     mydoc = docx.Document()
     third_para = mydoc.add_paragraph("This is the third paragraph.")
@@ -47,7 +66,7 @@ def word_crate(word_file):
 def word_crate_from_template(word_file):
     # https://docxtpl.readthedocs.io/en/latest/
     # https://blog.formpl.us/how-to-generate-word-documents-from-templates-using-python-cb039ea2c890
-    from docxtpl import DocxTemplate
+
 
     #doc = DocxTemplate("./inline_image_tpl.docx")
     doc = DocxTemplate("./template.docx")
@@ -61,13 +80,12 @@ def word_crate_from_template_mail_merge(word_file):
     # https://pbpython.com/python-word-template.html
     # pip install docx-mailmerge
     #from __future__ import print_function
-    from mailmerge import MailMerge
-    from datetime import date
-
+    """
     template = "template.docx"
     document = MailMerge(template)  
     print(document.get_merge_fields())
     print(document.columns)
+    """
     pass
 
 
@@ -75,8 +93,6 @@ def word_crate_from_template_mail_merge(word_file):
 
 
 def add_signature(template, context, signature):
-    from docx.shared import Cm
-    from docxtpl import DocxTemplate, InlineImage
     tmp = DocxTemplate(template)
 
     img_size = Cm(6.75)  # sets the size of the image
@@ -89,8 +105,7 @@ def add_signature(template, context, signature):
 def word_crate_from_template_with_qrcode(word_file,image_qrcode):
     # https://docxtpl.readthedocs.io/en/latest/
     # https://blog.formpl.us/how-to-generate-word-documents-from-templates-using-python-cb039ea2c890
-    from docx.shared import Cm
-    from docxtpl import DocxTemplate, InlineImage
+
     #doc = DocxTemplate("./inline_image_tpl.docx")
     doc = DocxTemplate(document_template)
     
@@ -114,24 +129,17 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 """ 
-import os
-import sys
-from os import chdir
-from os.path import join
-from os.path import dirname
-from os import environ
-
+"""
 def resource_path2(relative_path):
-    import os
-    """ Get absolute path to resource, works for dev and for PyInstaller """
+    # Get absolute path to resource, works for dev and for PyInstaller
     try:
         # PyInstaller creates a temp folder and stores path in _MEIPASS
         base_path = sys._MEIPASS
     except Exception:
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
-
-
+"""
+"""
 def resource_path(relative):
     return os.path.join(
         os.environ.get(
@@ -140,18 +148,17 @@ def resource_path(relative):
         ),
         relative
     )
+"""
 def word_create_from_template(word_file,image_qrcode,info_name,info_greeting,info_unit,info_arrival,info_deperture,info_saludation,info_contact,info_company_name,info_phone):
     # https://docxtpl.readthedocs.io/en/latest/
     # https://blog.formpl.us/how-to-generate-word-documents-from-templates-using-python-cb039ea2c890
     # from docxtpl import DocxTemplate, InlineImage
-    from docx.shared import Cm
-    #from html import escape
-    from docxtpl import DocxTemplate, InlineImage
+
 
     
     filename = 'myfilesname.type'
     filename = document_template
-    
+    """
     if hasattr(sys, '_MEIPASS'):
         # PyInstaller >= 1.6
         chdir(sys._MEIPASS)
@@ -163,12 +170,18 @@ def word_create_from_template(word_file,image_qrcode,info_name,info_greeting,inf
     else:
         chdir(dirname(sys.argv[0]))
         filename = join(dirname(sys.argv[0]), filename)
-        
+    """ 
     # doc = DocxTemplate("./inline_image_tpl.docx")
     # doc = DocxTemplate(resource_path(document_template))
+
+    # cs_freeze needs that
+    filename = myConfig.getPath(filename)
+
     doc = DocxTemplate(filename)
-    import myConfig
-    image_qrcode = myConfig.getPath(image_qrcode)
+
+    # cs_freeze needs that
+    # image_qrcode = myConfig.getPath(image_qrcode)
+    
     img_size = Cm(6.75)  # sets the size of the image
     info_qrcode = InlineImage(doc,image_qrcode, img_size)
 
@@ -234,7 +247,7 @@ def create_email_from_html_template(image_qrcode,name,greetings,unit,arrival,dep
     # image_source = "cid:qrcode001"
     # qrcode_html = '<img src="'+image_source+'" alt="qrcode" title="QR Code" style="display:block">'
     # https://stackoverflow.com/questions/44544369/i-am-not-able-to-add-an-image-in-email-body-using-python-i-am-able-to-add-a-pi
-    import base64
+
     # https://stackoverflow.com/questions/3715493/encoding-an-image-file-with-base64
     def get_base64_encoded_image(image_path):
         with open(image_path, "rb") as img_file:
@@ -264,8 +277,9 @@ def create_email_from_html_template(image_qrcode,name,greetings,unit,arrival,dep
                     phone = phone,
                     qrcode = qrcode_html)
     """
-    from string import Template
-    html_template_code = getFileContent(document_template_html)
+
+    document_template_html_path = myConfig.getPath(document_template_html)
+    html_template_code = getFileContent(document_template_html_path)
 
     html_template_code = html_template_code.replace("{","$")
     html_template_code = html_template_code.replace("}","")

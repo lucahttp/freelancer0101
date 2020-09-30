@@ -1,3 +1,46 @@
+# import pythoncom
+import win32com.client as win32
+import os
+
+import myConfig
+
+# pythoncom.CoInitialize()
+# pythoncom.CoInitialize()
+
+
+
+#thread = threading.Thread(target=myBusiness.the_aim_of_the_program_with_delay, args=())
+#thread.daemon = True                            # Daemonize thread
+#thread.start()                                  # Start the execution
+#my_func()
+
+
+
+# import win32com.client as win32
+from threading import Thread
+import pythoncom
+
+"""
+class ExcelManip:
+    def __init__(self):
+    self.xlApp = win32com.client.Dispatch('Excel.Application')
+    self.xlApp.Visible = True
+
+def createExcel():
+    import pythoncom
+    pythoncom.CoInitialize()
+    excel = ExcelManip()
+
+thread = Thread(target = createExcel)
+thread.start()
+"""
+
+
+"""
+if __name__ == '__main__':
+    start()
+"""
+
 def email_validation(x):
     a=0
     y=len(x)
@@ -15,10 +58,71 @@ def email_validation(x):
         return False
 
 
+class EmailMaster:
+    def __init__(self,recipient,subject,body=None,body_in_html=None,qrcode_attachement=None,file_attachement=None):
+        if email_validation(recipient) == True:
+            self.outlook = win32.client.Dispatch('outlook.Application')
+            self.outlook.Visible = True
+            #outlook = win32.Dispatch('outlook.application')
+            #outlook.Visible = True
+            mail = self.outlook.CreateItem(0)
+            #mail.To = 'To address'
+            mail.To = str(recipient)
+            """
+            mail.Subject = 'Message subject'
+            mail.Body = 'Message body'
+            mail.HTMLBody = '<h2>HTML Message body</h2>' #this field is optional
+            """
+            mail.Subject = str(subject)
+
+            if body != None:
+                mail.Body = str(body)
+                pass
+            if body_in_html != None:
+                mail.HTMLBody = str(body_in_html)
+                pass
+            
+            #this field is optional
+
+            # To attach a file to the email (optional):
+            #attachment  = "Path to the attachment"
+
+
+            if qrcode_attachement != None:
+                print(qrcode_attachement)
+                # https://stackoverflow.com/questions/51520/how-to-get-an-absolute-file-path-in-python
+                import os
+                #mypath = os.path.abspath(str(qrcode_attachement))
+                mypath = myConfig.getPathExternal(qrcode_attachement)
+                print(mypath)
+                #mail.Attachments.Add(mypath)
+
+                attochment = mail.Attachments.Add(mypath)
+                attochment.PropertyAccessor.SetProperty("http://schemas.microsoft.com/mapi/proptag/0x3712001F", "MyId1")
+                pass
+            if file_attachement != None:            
+                print(file_attachement)
+                # https://stackoverflow.com/questions/51520/how-to-get-an-absolute-file-path-in-python
+                import os
+                #myfilepath = os.path.abspath(str(file_attachement))
+                myfilepath = myConfig.getPathExternal(file_attachement)
+                print(myfilepath)
+                mail.Attachments.Add(myfilepath)
+                pass
+
+            mail.Send()
+            # tested with outlook 2019 in windows 10 pro 64 bit
+            pass
+        else:
+            "Email addres is unrecogn"
+            pass
+
+
+
 def email_send(recipient,subject,body=None,body_in_html=None,qrcode_attachement=None,file_attachement=None):
     if email_validation(recipient) == True:
-        import win32com.client as win32
         outlook = win32.Dispatch('outlook.application')
+        # outlook.Visible = True
         mail = outlook.CreateItem(0)
         #mail.To = 'To address'
         mail.To = str(recipient)
@@ -46,7 +150,8 @@ def email_send(recipient,subject,body=None,body_in_html=None,qrcode_attachement=
             print(qrcode_attachement)
             # https://stackoverflow.com/questions/51520/how-to-get-an-absolute-file-path-in-python
             import os
-            mypath = os.path.abspath(str(qrcode_attachement))
+            #mypath = os.path.abspath(str(qrcode_attachement))
+            mypath = myConfig.getPathExternal(qrcode_attachement)
             print(mypath)
             #mail.Attachments.Add(mypath)
 
@@ -57,7 +162,8 @@ def email_send(recipient,subject,body=None,body_in_html=None,qrcode_attachement=
             print(file_attachement)
             # https://stackoverflow.com/questions/51520/how-to-get-an-absolute-file-path-in-python
             import os
-            myfilepath = os.path.abspath(str(file_attachement))
+            #myfilepath = os.path.abspath(str(file_attachement))
+            myfilepath = myConfig.getPathExternal(file_attachement)
             print(myfilepath)
             mail.Attachments.Add(myfilepath)
             pass
@@ -70,13 +176,13 @@ def email_send(recipient,subject,body=None,body_in_html=None,qrcode_attachement=
         pass
     pass
 
+
 def OutlookMailer():
     # OutlookMailer.py
     # Python 2.7.6
 
-    import win32com.client as com
 
-    outlook = com.Dispatch("Outlook.Application")
+    outlook = win32.Dispatch("Outlook.Application")
 
     """
     Source - https://msdn.microsoft.com/en-us/library/office/ff869291.aspx
@@ -144,7 +250,6 @@ def OutlookMailer():
 
 def email_send_with_html_body(recipient,subject,body,body_in_html,attachement):
     if email_validation(recipient) == True:
-        import win32com.client as win32
         outlook = win32.Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
         #mail.To = 'To address'
@@ -164,7 +269,6 @@ def email_send_with_html_body(recipient,subject,body,body_in_html,attachement):
 
         print(attachement)
         # https://stackoverflow.com/questions/51520/how-to-get-an-absolute-file-path-in-python
-        import os
         mypath = os.path.abspath(str(attachement))
         print(mypath)
         mail.Attachments.Add(mypath)

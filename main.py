@@ -25,8 +25,19 @@ from time import sleep
 #sleep(15)
 
 # from multiprocessing import Process
-import threading, sys, os
+# import threading, 
+import sys, os
 import time
+
+import pythoncom
+from threading import Thread
+import win32com.client as win32
+
+def createExcel():
+    pythoncom.CoInitialize()
+    myBusiness.the_aim_of_the_program_with_delay()
+
+
 
 
 if __name__ == "__main__":
@@ -35,12 +46,18 @@ if __name__ == "__main__":
     mainWin.setFromConfigurationFile()
     # the aim of the program 
     mainWin.show()
+    #myBusiness.the_aim_of_the_program_with_delay()
 
+
+    thread = Thread(target = createExcel)
+    thread.start()
+
+    """
     thread = threading.Thread(target=myBusiness.the_aim_of_the_program_with_delay, args=())
-    thread.daemon = True                            # Daemonize thread
+    #thread.daemon = True                            # Daemonize thread
     thread.start()                                  # Start the execution
     #my_func()
-
+    """
     
     #do stuff
     mainWin.setFromConfigurationFile()
