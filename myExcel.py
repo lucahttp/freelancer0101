@@ -88,6 +88,10 @@ def CreateExample():
 
     tempfilename = "~example.xlsx"
     tempfilename = "example.xlsx"
+    print("tempfilename")
+    print(tempfilename)
+    tempfilename = myConfig.getPathExternal(tempfilename)
+    print(tempfilename)
 
 
     datestring = getTime()

@@ -1,7 +1,6 @@
 # import pythoncom
 import win32com.client as win32
 import os
-
 import myConfig
 
 # pythoncom.CoInitialize()
@@ -61,7 +60,7 @@ def email_validation(x):
 class EmailMaster:
     def __init__(self,recipient,subject,body=None,body_in_html=None,qrcode_attachement=None,file_attachement=None):
         if email_validation(recipient) == True:
-            self.outlook = win32.client.Dispatch('outlook.Application')
+            self.outlook = win32.Dispatch('outlook.Application')
             self.outlook.Visible = True
             #outlook = win32.Dispatch('outlook.application')
             #outlook.Visible = True

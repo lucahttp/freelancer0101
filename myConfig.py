@@ -5,16 +5,116 @@
 import configparser
 
 import myWord
-import myConfig
+# import myConfig
 
 import os
 import sys
 
-configuration_file_path = 'example.ini'
+
+
+def getPath(filename):
+    import os
+    import sys
+    from os import chdir
+    from os.path import join
+    from os.path import dirname
+    from os import environ
+    
+    if hasattr(sys, '_MEIPASS'):
+        # PyInstaller >= 1.6
+        chdir(sys._MEIPASS)
+        filename = join(sys._MEIPASS, filename)
+    elif '_MEIPASS2' in environ:
+        # PyInstaller < 1.6 (tested on 1.5 only)
+        chdir(environ['_MEIPASS2'])
+        filename = join(environ['_MEIPASS2'], filename)
+    else:
+        chdir(dirname(sys.argv[0]))
+        filename = join(dirname(sys.argv[0]), filename)
+        
+    return filename
+
+def getPathExternal(filename):
+    # https://stackoverflow.com/questions/404744/determining-application-path-in-a-python-exe-generated-by-pyinstaller
+    # config_name = 'myapp.cfg'
+    # filename
+
+    # determine if application is a script file or frozen exe
+    if getattr(sys, 'frozen', False):
+        application_path = os.path.dirname(sys.executable)
+    elif __file__:
+        application_path = os.path.dirname(__file__)
+
+    config_path = os.path.join(application_path, filename)
+    return config_path
+
+def copyFiles():
+    from shutil import copy
+    print("start copy")
+    """
+    import os
+    import sys
+
+    # config_name = 'myapp.cfg'
+
+    # determine if application is a script file or frozen exe
+    if getattr(sys, 'frozen', False):
+        application_path = os.path.dirname(sys.executable)
+    elif __file__:
+        application_path = os.path.dirname(__file__)
+
+    print("application_path")
+    print(application_path)
+    """
+    # config_path = os.path.join(application_path, config_name)
+
+
+    # myWord.document_template = getPathExternal(document_template_path)
+    # document_template = "./template_2.docx"
+
+    document_template_path = getPath(myWord.document_template)
+    myWord.document_template = getPathExternal(myWord.document_template)
+    print(document_template_path)
+    copy(document_template_path, myWord.document_template)
+
+
+
+
+    document_template_html_path = getPath(myWord.document_template_html)
+    myWord.document_template_html = getPathExternal(myWord.document_template_html)
+    print(document_template_html_path)
+    copy(document_template_html_path, myWord.document_template_html)
+
+
+
+    """
+    configuration_file_path_path = getPath(configuration_file_path)
+    configuration_file_path = getPathExternal(configuration_file_path)
+    print(document_template_html_path)
+    copy(configuration_file_path_path, configuration_file_path)
+    """
+    
+
+    
+    # print(getPathExternal(myWord.document_template_html))
+
+    # myWord.document_template_html = getPathExternal(document_template_html_path)
+
+    print("finish copy")
+    pass
+
+
+configuration_file_path = getPathExternal('example.ini')
+
 #configuration_file_path = myConfig.getPath(configuration_file_path)
 config = configparser.ConfigParser()
 config.sections()
 config.read(configuration_file_path)
+
+
+
+
+
 
 def configuration_file_has_been_persisted():
     #print(config.sections())
@@ -22,6 +122,7 @@ def configuration_file_has_been_persisted():
     return ('EXCEL' in config)
 
 def configuration_file_create_persist():
+    copyFiles()
     print("""
     
     WASAAAAAAAAAAAAAAAAAA
@@ -99,40 +200,7 @@ def print_data(section):
         pass
     #return (key in config[section])
 
-def getPathExternal(filename):
-    # https://stackoverflow.com/questions/404744/determining-application-path-in-a-python-exe-generated-by-pyinstaller
-    # config_name = 'myapp.cfg'
-    # filename
 
-    # determine if application is a script file or frozen exe
-    if getattr(sys, 'frozen', False):
-        application_path = os.path.dirname(sys.executable)
-    elif __file__:
-        application_path = os.path.dirname(__file__)
-
-    config_path = os.path.join(application_path, filename)
-    return config_path
-def getPath(filename):
-    import os
-    import sys
-    from os import chdir
-    from os.path import join
-    from os.path import dirname
-    from os import environ
-    
-    if hasattr(sys, '_MEIPASS'):
-        # PyInstaller >= 1.6
-        chdir(sys._MEIPASS)
-        filename = join(sys._MEIPASS, filename)
-    elif '_MEIPASS2' in environ:
-        # PyInstaller < 1.6 (tested on 1.5 only)
-        chdir(environ['_MEIPASS2'])
-        filename = join(environ['_MEIPASS2'], filename)
-    else:
-        chdir(dirname(sys.argv[0]))
-        filename = join(dirname(sys.argv[0]), filename)
-        
-    return filename
 """
 
 # save configuration of my python program

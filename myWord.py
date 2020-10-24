@@ -19,10 +19,10 @@ from os import environ
 
 
 
-import myConfig
-# document_template = "./template_2.docx"
-document_template = "template.docx"
+
+
 document_template_html = "template.html"
+document_template = "template.docx"
 
 
 
@@ -156,8 +156,8 @@ def word_create_from_template(word_file,image_qrcode,info_name,info_greeting,inf
 
 
     
-    filename = 'myfilesname.type'
-    filename = document_template
+    # filename = 'myfilesname.type'
+    # filename = document_template
     """
     if hasattr(sys, '_MEIPASS'):
         # PyInstaller >= 1.6
@@ -175,9 +175,9 @@ def word_create_from_template(word_file,image_qrcode,info_name,info_greeting,inf
     # doc = DocxTemplate(resource_path(document_template))
 
     # cs_freeze needs that
-    filename = myConfig.getPath(filename)
+    # filename = myConfig.getPath(filename)
 
-    doc = DocxTemplate(filename)
+    doc = DocxTemplate(document_template)
 
     # cs_freeze needs that
     # image_qrcode = myConfig.getPath(image_qrcode)
@@ -278,8 +278,9 @@ def create_email_from_html_template(image_qrcode,name,greetings,unit,arrival,dep
                     qrcode = qrcode_html)
     """
 
-    document_template_html_path = myConfig.getPath(document_template_html)
-    html_template_code = getFileContent(document_template_html_path)
+    # document_template_html_path = myConfig.getPath(document_template_html)
+    print(document_template_html)
+    html_template_code = getFileContent(document_template_html)
 
     html_template_code = html_template_code.replace("{","$")
     html_template_code = html_template_code.replace("}","")

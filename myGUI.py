@@ -253,7 +253,8 @@ class MainWindow(QMainWindow):
 
     def searchAndLoadFile(self):
         #path_to_file, _ = QFileDialog.getOpenFileName(self, self.tr("Load Image"), self.tr("~/Desktop/"), self.tr("Images (*.jpg)"))
-        path_to_file, _  = QFileDialog.getOpenFileName(self, self.tr("Load Excel"), self.tr("~/Desktop/"), self.tr("/ (*.xlsx)"))
+        current_location = myConfig.getPathExternal("")
+        path_to_file, _  = QFileDialog.getOpenFileName(self, self.tr("Load Excel"), self.tr("~/Desktop/"), self.tr(current_location+" (*.xlsx)"))
 
         #self.test(path_to_file)
         print(path_to_file)
